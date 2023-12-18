@@ -1,4 +1,4 @@
-# Install script for directory: /Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI
+# Install script for directory: /Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

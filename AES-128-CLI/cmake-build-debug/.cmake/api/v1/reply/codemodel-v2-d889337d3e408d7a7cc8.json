@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI/cmake-build-debug",
-		"source" : "/Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI"
+		"build" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI/cmake-build-debug",
+		"source" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI"
 	},
 	"version" : 
 	{

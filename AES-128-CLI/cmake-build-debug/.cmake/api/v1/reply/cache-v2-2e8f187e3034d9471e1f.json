@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI/cmake-build-debug"
+			"value" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI/cmake-build-debug"
 		},
 		{
 			"name" : "AES_128_CLI_IS_TOP_LEVEL",
@@ -35,7 +35,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI"
+			"value" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI"
 		},
 		{
 			"name" : "CMAKE_ADDR2LINE",
@@ -91,7 +91,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI/cmake-build-debug"
+			"value" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -515,7 +515,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/ivaylo.kalaydzhiev/Desktop/AES-128-CLI"
+			"value" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI"
 		},
 		{
 			"name" : "CMAKE_INSTALL_NAME_TOOL",
