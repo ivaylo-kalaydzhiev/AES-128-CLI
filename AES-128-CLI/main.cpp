@@ -3,17 +3,66 @@
 #include <fstream>
 
 class AESCryptographer {
+private:
+    static const int KEY_SIZE = 16;
+    static const int ROUNDS = 9;
+    static const int BLOCK_SIZE = 16;
+
+    // I might want to change this
+    static unsigned char weakHash(const std::string& input) {
+        unsigned char hash = 0;
+        for (char c : input) {
+            hash ^= (unsigned char)(c);
+        }
+        return hash;
+    }
+
+    static void passwordToKey(const std::string& password, unsigned char* key) {
+        unsigned char derivedKey[KEY_SIZE];
+        for (int i = 0; i < KEY_SIZE; i++) {
+            derivedKey[i] = weakHash(password + std::to_string(i));
+        }
+        std::memcpy(key, derivedKey, KEY_SIZE);
+    }
+
 public:
     static void encrypt(std::ifstream& src,
                         std::ofstream& dst,
                         const std::string& password) {
-        std::cout << "Cryptographer not implemented" << std::endl;
+        // Transform user password to key
+        // Assuming 16-byte key for AES-128
+        unsigned char key[KEY_SIZE];
+        passwordToKey(password, key);
+
+        // Calculate file size in bytes
+        src.seekg(0, std::ios::end);
+        size_t fileSize = src.tellg();
+
+        // Return pointer to beginning
+        src.seekg(0, std::ios::beg);
+
+        // Buffer to hold one block of data (16 bytes for AES-128)
+        unsigned char block[BLOCK_SIZE];
+
+        // Process file in blocks
+        while (fileSize >= BLOCK_SIZE) {
+            // Read a block of data from the file
+            src.read(reinterpret_cast<char*>(block), BLOCK_SIZE);
+
+            // Encrypt the block using AES
+            // Implement AES encryption rounds here: AddRoundKey, SubBytes, ShiftRows, MixColumns (omit MixColumns in the last round)
+
+            // Write the encrypted block to the destination file
+            dst.write(reinterpret_cast<char*>(block), BLOCK_SIZE);
+
+            fileSize -= BLOCK_SIZE;
+        }
     }
 
     static void decrypt(std::ifstream& src,
                         std::ofstream& dst,
                         const std::string& password) {
-        std::cout << "Cryptographer not implemented" << std::endl;
+        std::cout << "Decrypt not implemented" << std::endl;
     }
 };
 
