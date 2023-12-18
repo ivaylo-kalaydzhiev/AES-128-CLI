@@ -2,10 +2,15 @@
 #include <string>
 #include <fstream>
 
+// TODO
+// Make classes that don't need to be classes into namespaces
+// Make better hashing from password to key
+// Remove STL functions/ classes
+
 class AESCryptographer {
 private:
     static const int KEY_SIZE = 16;
-    static const int ROUNDS = 9;
+    static const int ROUNDS = 10;
     static const int BLOCK_SIZE = 16;
 
     // I might want to change this
@@ -25,34 +30,53 @@ private:
         std::memcpy(key, derivedKey, KEY_SIZE);
     }
 
+    static size_t calcFileSize(std::ifstream& file) {
+        file.seekg(0, std::ios::end);
+        size_t fileSize = file.tellg();
+
+        // Return pointer to beginning
+        file.seekg(0, std::ios::beg);
+    }
+
+private:
+    // AES STEPS
+
+    static void expandKeys() {}
+    static void initialRound() {}
+    static void subBytes() {}
+    static void shiftRows() {}
+    static void mixColumns() {}
+    static void addRoundKey() {}
 public:
     static void encrypt(std::ifstream& src,
                         std::ofstream& dst,
                         const std::string& password) {
-        // Transform user password to key
-        // Assuming 16-byte key for AES-128
         unsigned char key[KEY_SIZE];
         passwordToKey(password, key);
 
-        // Calculate file size in bytes
-        src.seekg(0, std::ios::end);
-        size_t fileSize = src.tellg();
-
-        // Return pointer to beginning
-        src.seekg(0, std::ios::beg);
+        size_t fileSize = calcFileSize(src);
 
         // Buffer to hold one block of data (16 bytes for AES-128)
         unsigned char block[BLOCK_SIZE];
 
         // Process file in blocks
         while (fileSize >= BLOCK_SIZE) {
-            // Read a block of data from the file
             src.read(reinterpret_cast<char*>(block), BLOCK_SIZE);
 
-            // Encrypt the block using AES
-            // Implement AES encryption rounds here: AddRoundKey, SubBytes, ShiftRows, MixColumns (omit MixColumns in the last round)
+            // Process Block
+            // Extract to func if possible
+            expandKeys();
+            initialRound();
+            for (int i = 0; i < ROUNDS - 1; i++) {
+                subBytes();
+                shiftRows();
+                mixColumns();
+                addRoundKey();
+            }
+            subBytes();
+            shiftRows();
+            addRoundKey();
 
-            // Write the encrypted block to the destination file
             dst.write(reinterpret_cast<char*>(block), BLOCK_SIZE);
 
             fileSize -= BLOCK_SIZE;
@@ -92,8 +116,8 @@ public:
             return;
         }
 
-        std::ifstream srcFile(srcFileName);
-        std::ofstream dstFile(dstFileName);
+        std::ifstream srcFile(srcFileName, std::ios::binary);
+        std::ofstream dstFile(dstFileName, std::ios::binary);
 
         if (!srcFile.is_open()) {
             std::cout << "Unable to open file: " << srcFileName << std::endl;
