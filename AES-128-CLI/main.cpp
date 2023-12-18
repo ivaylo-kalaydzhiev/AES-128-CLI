@@ -1,22 +1,88 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+
+class AESCryptographer {
+public:
+    static void encrypt(std::ifstream& src,
+                        std::ofstream& dst,
+                        const std::string& password) {
+        std::cout << "Cryptographer not implemented" << std::endl;
+    }
+
+    static void decrypt(std::ifstream& src,
+                        std::ofstream& dst,
+                        const std::string& password) {
+        std::cout << "Cryptographer not implemented" << std::endl;
+    }
+};
 
 class FileManager {
 public:
     static void printFileContents(const std::string& fileName) {
-        std::cout << "FileManager not implemented";
+        std::ifstream file(fileName);
+
+        if (!file.is_open()) {
+            std::cout << "Unable to open file: " << fileName << std::endl;
+            return;
+        }
+
+        std::string line;
+        while (std::getline(file, line)) {
+            std::cout << line << std::endl;
+        }
+
+        file.close();
     }
 
     static void encryptFile(const std::string& srcFileName,
                             const std::string& dstFileName,
                             const std::string& password) {
-        std::cout << "FileManager not implemented";
+        if (srcFileName == dstFileName) {
+            std::cout << "Source file and destination file can not be the same" << std::endl;
+            return;
+        }
+
+        std::ifstream srcFile(srcFileName);
+        std::ofstream dstFile(dstFileName);
+
+        if (!srcFile.is_open()) {
+            std::cout << "Unable to open file: " << srcFileName << std::endl;
+            return;
+        } else if (!dstFile.is_open()) {
+            std::cout << "Unable to open file: " << dstFileName << std::endl;
+            return;
+        }
+
+        AESCryptographer::encrypt(srcFile, dstFile, password);
+
+        srcFile.close();
+        dstFile.close();
     }
 
     static void decryptFile(const std::string& srcFileName,
                             const std::string& dstFileName,
                             const std::string& password) {
-        std::cout << "FileManager not implemented";
+        if (srcFileName == dstFileName) {
+            std::cout << "Source file and destination file can not be the same" << std::endl;
+            return;
+        }
+
+        std::ifstream srcFile(srcFileName);
+        std::ofstream dstFile(dstFileName);
+
+        if (!srcFile.is_open()) {
+            std::cout << "Unable to open file: " << srcFileName << std::endl;
+            return;
+        } else if (!dstFile.is_open()) {
+            std::cout << "Unable to open file: " << dstFileName << std::endl;
+            return;
+        }
+
+        AESCryptographer::decrypt(srcFile, dstFile, password);
+
+        srcFile.close();
+        dstFile.close();
     }
 };
 
