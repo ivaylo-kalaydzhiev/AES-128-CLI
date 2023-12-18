@@ -1,4 +1,25 @@
 #include <iostream>
+#include <string>
+
+class FileManager {
+public:
+    static void printFileContents(const std::string& fileName) {
+        std::cout << "FileManager not implemented";
+    }
+
+    static void encryptFile(const std::string& srcFileName,
+                            const std::string& dstFileName,
+                            const std::string& password) {
+        std::cout << "FileManager not implemented";
+    }
+
+    static void decryptFile(const std::string& srcFileName,
+                            const std::string& dstFileName,
+                            const std::string& password) {
+        std::cout << "FileManager not implemented";
+    }
+};
+
 
 class Program {
 private:
@@ -17,15 +38,50 @@ private:
     }
 
     static void enterPrintFileFlow() {
-        std::cout << "You chose option 1" << std::endl;
+        std::cout << "Enter file name: ";
+        std::string fileName;
+        std::cin >> fileName;
+        FileManager::printFileContents(fileName);
     }
 
     static void enterEncryptFileFlow() {
-        std::cout << "You chose option 2" << std::endl;
+        // Ask for file name
+        std::cout << "Enter file name: ";
+        std::string srcFileName;
+        std::cin >> srcFileName;
+
+        // Ask for password
+        std::cout << "Enter encryption password: ";
+        std::string password;
+        std::cin >> password;
+
+        // Ask for destination file name
+        std::cout << "Enter destination file name: ";
+        std::string dstFileName;
+        std::cin >> dstFileName;
+
+        // Make the FileManger encrypt it
+        FileManager::encryptFile(srcFileName, dstFileName, password);
     }
 
     static void enterDecryptFileFlow() {
-        std::cout << "You chose option 3" << std::endl;
+        // Ask for file name
+        std::cout << "Enter file name: ";
+        std::string srcFileName;
+        std::cin >> srcFileName;
+
+        // Ask for password
+        std::cout << "Enter encryption password: ";
+        std::string password;
+        std::cin >> password;
+
+        // Ask for destination file name
+        std::cout << "Enter destination file name: ";
+        std::string dstFileName;
+        std::cin >> dstFileName;
+
+        // Make the FileManger encrypt it
+        FileManager::decryptFile(srcFileName, dstFileName, password);
     }
 
     static void exitCLIFlow() {
