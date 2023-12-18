@@ -96,7 +96,12 @@ private:
     }
 
     static void mixColumns() {}
-    static void addRoundKey(unsigned char* state, unsigned char* roundKey) {}
+    
+    static void addRoundKey(unsigned char* state, unsigned char* roundKey) {
+        for(int i = 0; i < BLOCK_SIZE; i++) {
+            state[i] ^= roundKey[i];
+        }
+    }
 
 public:
     static void encrypt(std::ifstream& src,
