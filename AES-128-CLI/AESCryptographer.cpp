@@ -264,9 +264,9 @@ public:
         // Process file in blocks
         while (fileSize >= BLOCK_SIZE) {
             // TODO: Handle cases where the message is not evenly divisible in 16, by padding
-            src.read(reinterpret_cast<char *>(block), BLOCK_SIZE);
+            src.read((char*)block, BLOCK_SIZE);
             encryptBlock(block, key, expandedKey);
-            dst.write(reinterpret_cast<char *>(block), BLOCK_SIZE);
+            dst.write((char*)(block), BLOCK_SIZE);
             fileSize -= BLOCK_SIZE;
         }
     }

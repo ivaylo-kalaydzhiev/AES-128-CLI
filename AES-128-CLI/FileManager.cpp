@@ -32,8 +32,8 @@ public:
             return;
         }
 
-        std::ifstream srcFile(srcFileName, std::ios::binary);
-        std::ofstream dstFile(dstFileName, std::ios::binary);
+        std::ifstream srcFile(srcFileName);
+        std::ofstream dstFile(dstFileName);
 
         if (!srcFile.is_open()) {
             std::cout << "Unable to open file: " << srcFileName << std::endl;
