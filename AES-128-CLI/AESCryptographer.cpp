@@ -141,8 +141,8 @@ private:
         in[0] ^= RCON[0];
     }
 
-    static void expandKeys(unsigned char* key, unsigned char* expandedKeys) {
-        std::memcpy(key, expandedKeys, KEY_SIZE);
+    static void expandKey(unsigned char* key, unsigned char* expandedKey) {
+        std::memcpy(key, expandedKey, KEY_SIZE);
 
         int doneBytes = KEY_SIZE;
         int rconIteration = 1;
@@ -150,7 +150,7 @@ private:
 
         while (doneBytes < EXPANDED_KEYS_SIZE) {
             for (int i = 0; i < 4; ++i) {
-                tmp[i] = expandedKeys[i + doneBytes - 4];
+                tmp[i] = expandedKey[i + doneBytes - 4];
             }
 
             if (doneBytes % 16 == 0) {
@@ -158,7 +158,7 @@ private:
             }
 
             for (unsigned char c = 0; c < 4; c++) {
-                expandedKeys[doneBytes] = expandedKeys[doneBytes - 16] ^ tmp[c];
+                expandedKey[doneBytes] = expandedKey[doneBytes - 16] ^ tmp[c];
                 doneBytes++;
             }
         }
@@ -228,46 +228,44 @@ private:
         }
     }
 
+    static void encryptBlock(unsigned char* block, unsigned char* key, unsigned char* expandedKey) {
+        addRoundKey(block, key);
+        for (int i = 0; i < ROUNDS - 1; i++) {
+            subBytes(block);
+            shiftRows(block);
+            mixColumns(block);
+            // Just moves the pointer to the right section of the expandedKey
+            addRoundKey(block, expandedKey + (16 * (i + 1)));
+        }
+        subBytes(block);
+        shiftRows(block);
+        // Just moves the pointer to the right section of the expandedKey
+        addRoundKey(block, expandedKey + 160);
+    }
+
+    static void produceKeys(const std::string& password, unsigned char* key, unsigned char* expandedKey) {
+        passwordToKey(password, key);
+        expandKey(key, expandedKey);
+    }
+
 // Public interface
 public:
     static void encrypt(std::ifstream& src,
                         std::ofstream& dst,
                         const std::string& password) {
         unsigned char key[KEY_SIZE];
-        passwordToKey(password, key);
+        unsigned char expandedKey[EXPANDED_KEYS_SIZE];
+        produceKeys(password, key, expandedKey);
 
         size_t fileSize = calcFileSize(src);
-
-        // Buffer to hold one block of data
         unsigned char block[BLOCK_SIZE];
 
         // Process file in blocks
         while (fileSize >= BLOCK_SIZE) {
             // TODO: Handle cases where the message is not evenly divisible in 16, by padding
             src.read(reinterpret_cast<char*>(block), BLOCK_SIZE);
-
-            // Process Block
-            // TODO: Move out the while loop
-            unsigned char expandedKey[EXPANDED_KEYS_SIZE];
-            expandKeys(key, expandedKey);
-
-            // TODO: Extract to func if possible
-            addRoundKey(block, key);
-            for (int i = 0; i < ROUNDS - 1; i++) {
-                subBytes(block);
-                shiftRows(block);
-                mixColumns(block);
-                // Just moves the pointer to the right section of the expandedKey
-                addRoundKey(block, expandedKey + (16 * (i + 1)));
-            }
-            subBytes(block);
-            shiftRows(block);
-
-            // Just moves the pointer to the right section of the expandedKey
-            addRoundKey(block, expandedKey + 160);
-
+            encryptBlock(block, key, expandedKey);
             dst.write(reinterpret_cast<char*>(block), BLOCK_SIZE);
-
             fileSize -= BLOCK_SIZE;
         }
     }
