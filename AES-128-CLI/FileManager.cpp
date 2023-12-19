@@ -8,7 +8,7 @@
 
 class FileManager {
 public:
-    static void printFileContents(const std::string& fileName) {
+    static void printFileContents(const std::string &fileName) {
         std::ifstream file(fileName);
 
         if (!file.is_open()) {
@@ -24,9 +24,9 @@ public:
         file.close();
     }
 
-    static void encryptFile(const std::string& srcFileName,
-                            const std::string& dstFileName,
-                            const std::string& password) {
+    static void encryptFile(const std::string &srcFileName,
+                            const std::string &dstFileName,
+                            const std::string &password) {
         if (srcFileName == dstFileName) {
             std::cout << "Source file and destination file can not be the same" << std::endl;
             return;
@@ -49,9 +49,9 @@ public:
         dstFile.close();
     }
 
-    static void decryptFile(const std::string& srcFileName,
-                            const std::string& dstFileName,
-                            const std::string& password) {
+    static void decryptFile(const std::string &srcFileName,
+                            const std::string &dstFileName,
+                            const std::string &password) {
         if (srcFileName == dstFileName) {
             std::cout << "Source file and destination file can not be the same" << std::endl;
             return;
