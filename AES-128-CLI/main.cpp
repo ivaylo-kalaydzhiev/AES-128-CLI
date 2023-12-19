@@ -238,20 +238,20 @@ public:
 
         size_t fileSize = calcFileSize(src);
 
-        // Buffer to hold one block of data (16 bytes for AES-128)
+        // Buffer to hold one block of data
         unsigned char block[BLOCK_SIZE];
 
         // Process file in blocks
         while (fileSize >= BLOCK_SIZE) {
+            // TODO: Handle cases where the message is not evenly divisible in 16, by padding
             src.read(reinterpret_cast<char*>(block), BLOCK_SIZE);
 
             // Process Block
-
-            // Move out the while loop
+            // TODO: Move out the while loop
             unsigned char expandedKey[176];
             expandKeys(key, expandedKey);
 
-            // Extract to func if possible
+            // TODO: Extract to func if possible
             addRoundKey(block, key);
             for (int i = 0; i < ROUNDS - 1; i++) {
                 subBytes(block);
