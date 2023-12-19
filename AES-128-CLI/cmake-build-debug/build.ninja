@@ -67,6 +67,12 @@ build CMakeFiles/AES_128_CLI.dir/FileManager.cpp.o: CXX_COMPILER__AES_128_CLI_De
   OBJECT_DIR = CMakeFiles/AES_128_CLI.dir
   OBJECT_FILE_DIR = CMakeFiles/AES_128_CLI.dir
 
+build CMakeFiles/AES_128_CLI.dir/Program.cpp.o: CXX_COMPILER__AES_128_CLI_Debug /Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI/Program.cpp || cmake_object_order_depends_target_AES_128_CLI
+  DEP_FILE = CMakeFiles/AES_128_CLI.dir/Program.cpp.o.d
+  FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk -fcolor-diagnostics -std=gnu++17
+  OBJECT_DIR = CMakeFiles/AES_128_CLI.dir
+  OBJECT_FILE_DIR = CMakeFiles/AES_128_CLI.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target AES_128_CLI
@@ -75,7 +81,7 @@ build CMakeFiles/AES_128_CLI.dir/FileManager.cpp.o: CXX_COMPILER__AES_128_CLI_De
 #############################################
 # Link the executable AES_128_CLI
 
-build AES_128_CLI: CXX_EXECUTABLE_LINKER__AES_128_CLI_Debug CMakeFiles/AES_128_CLI.dir/main.cpp.o CMakeFiles/AES_128_CLI.dir/AESCryptographer.cpp.o CMakeFiles/AES_128_CLI.dir/FileManager.cpp.o
+build AES_128_CLI: CXX_EXECUTABLE_LINKER__AES_128_CLI_Debug CMakeFiles/AES_128_CLI.dir/main.cpp.o CMakeFiles/AES_128_CLI.dir/AESCryptographer.cpp.o CMakeFiles/AES_128_CLI.dir/FileManager.cpp.o CMakeFiles/AES_128_CLI.dir/Program.cpp.o
   FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk
   OBJECT_DIR = CMakeFiles/AES_128_CLI.dir
   POST_BUILD = :
