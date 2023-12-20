@@ -461,7 +461,6 @@ public:
     static void encrypt(std::ifstream &src,
                         std::ofstream &dst,
                         const std::string &password) {
-        // TODO: Introduce an option to use password to generate key
         unsigned char key[KEY_SIZE] = {
                 1, 2, 3, 4,
                 5, 6, 7, 8,
@@ -495,7 +494,6 @@ public:
     static void decrypt(std::ifstream &src,
                         std::ofstream &dst,
                         const std::string &password) {
-        // TODO: Introduce an option to use password to generate key
         unsigned char key[KEY_SIZE] = {
                 1, 2, 3, 4,
                 5, 6, 7, 8,

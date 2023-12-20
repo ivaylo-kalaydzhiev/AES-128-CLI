@@ -482,14 +482,3 @@ int main() {
 
     return 0;
 }
-
-
-// Questions
-// What online tool will be used to check if our encryption is right?
-// Is there some library that I must not use?
-// Am I going to have to explain how the individual steps of the AES work, including the math?
-
-// TODO: Clean this implementation [DONE]
-// TODO: Implement decryption [DONE]
-// TODO: Make the public interfaces identical to the main project
-// TODO: Move this functionality to main project
