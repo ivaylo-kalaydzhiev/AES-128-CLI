@@ -1,5 +1,24 @@
 #include <iostream>
 
+unsigned char RCON[256] = {
+        0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a,
+        0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39,
+        0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a,
+        0x74, 0xe8, 0xcb, 0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8,
+        0xab, 0x4d, 0x9a, 0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef,
+        0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc,
+        0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b,
+        0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a, 0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3,
+        0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94,
+        0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20,
+        0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a, 0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35,
+        0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f,
+        0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d, 0x01, 0x02, 0x04,
+        0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a, 0x2f, 0x5e, 0xbc, 0x63,
+        0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd,
+        0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d
+};
+
 unsigned char MUL_2[256] = {
         0x00, 0x02, 0x04, 0x06, 0x08, 0x0a, 0x0c, 0x0e, 0x10, 0x12, 0x14, 0x16, 0x18, 0x1a, 0x1c, 0x1e,
         0x20, 0x22, 0x24, 0x26, 0x28, 0x2a, 0x2c, 0x2e, 0x30, 0x32, 0x34, 0x36, 0x38, 0x3a, 0x3c, 0x3e,
@@ -57,32 +76,71 @@ unsigned char S_BOX[256] = {
         0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
 };
 
-void KeyExpansion() {
+void KeyExpansionCore(unsigned char *in, unsigned char i) {
+    // Rotate the 4 bytes left
+    unsigned char t = in[0];
+    in[0] = in[1];
+    in[1] = in[2];
+    in[2] = in[3];
+    in[3] = t;
 
+    // Substitution
+    in[0] = S_BOX[in[0]];
+    in[1] = S_BOX[in[1]];
+    in[2] = S_BOX[in[2]];
+    in[3] = S_BOX[in[3]];
+
+    // RCon
+    in[0] ^= RCON[i];
 }
 
-void MixColumns(unsigned char* state) {
+void KeyExpansion(unsigned char* inputKey, unsigned char* expandedKey) {
+    for (int i = 0; i < 16; ++i) {
+        expandedKey[i] = inputKey[i];
+    }
+
+    int bytesGenerated = 16;
+    int rconIteration = 1;
+    unsigned char tmp[4];
+
+    while (bytesGenerated < 176) {
+        for (int i = 0; i < 4; ++i) {
+            tmp[i] = expandedKey[i + bytesGenerated - 4];
+        }
+
+        if (bytesGenerated % 16 == 0) {
+            KeyExpansionCore(tmp, rconIteration++);
+        }
+
+        for (unsigned char a = 0; a < 4; a++) {
+            expandedKey[bytesGenerated] = expandedKey[bytesGenerated - 16] ^ tmp[a];
+            bytesGenerated++;
+        }
+    }
+}
+
+void MixColumns(unsigned char *state) {
     unsigned char tmp[16];
 
-    tmp[0] = (unsigned char)(MUL_2[state[0]] ^ MUL_3[state[1]] ^ state[2] ^ state[3]);
-    tmp[1] = (unsigned char)(state[0] ^ MUL_2[state[1]] ^ MUL_3[state[2]] ^ state[3]);
-    tmp[2] = (unsigned char)(state[0] ^ state[1] ^ MUL_2[state[2]] ^ MUL_3[state[3]]);
-    tmp[3] = (unsigned char)(MUL_3[state[0]] ^ state[1] ^ state[2] ^ MUL_2[state[3]]);
+    tmp[0] = (unsigned char) (MUL_2[state[0]] ^ MUL_3[state[1]] ^ state[2] ^ state[3]);
+    tmp[1] = (unsigned char) (state[0] ^ MUL_2[state[1]] ^ MUL_3[state[2]] ^ state[3]);
+    tmp[2] = (unsigned char) (state[0] ^ state[1] ^ MUL_2[state[2]] ^ MUL_3[state[3]]);
+    tmp[3] = (unsigned char) (MUL_3[state[0]] ^ state[1] ^ state[2] ^ MUL_2[state[3]]);
 
-    tmp[4] = (unsigned char)(MUL_2[state[4]] ^ MUL_3[state[5]] ^ state[6] ^ state[7]);
-    tmp[5] = (unsigned char)(state[4] ^ MUL_2[state[5]] ^ MUL_3[state[6]] ^ state[7]);
-    tmp[6] = (unsigned char)(state[4] ^ state[5] ^ MUL_2[state[6]] ^ MUL_3[state[7]]);
-    tmp[7] = (unsigned char)(MUL_3[state[4]] ^ state[5] ^ state[6] ^ MUL_2[state[7]]);
+    tmp[4] = (unsigned char) (MUL_2[state[4]] ^ MUL_3[state[5]] ^ state[6] ^ state[7]);
+    tmp[5] = (unsigned char) (state[4] ^ MUL_2[state[5]] ^ MUL_3[state[6]] ^ state[7]);
+    tmp[6] = (unsigned char) (state[4] ^ state[5] ^ MUL_2[state[6]] ^ MUL_3[state[7]]);
+    tmp[7] = (unsigned char) (MUL_3[state[4]] ^ state[5] ^ state[6] ^ MUL_2[state[7]]);
 
-    tmp[8] = (unsigned char)(MUL_2[state[8]] ^ MUL_3[state[9]] ^ state[10] ^ state[11]);
-    tmp[9] = (unsigned char)(state[8] ^ MUL_2[state[9]] ^ MUL_3[state[10]] ^ state[11]);
-    tmp[10] = (unsigned char)(state[8] ^ state[9] ^ MUL_2[state[10]] ^ MUL_3[state[11]]);
-    tmp[11] = (unsigned char)(MUL_3[state[8]] ^ state[9] ^ state[10] ^ MUL_2[state[11]]);
+    tmp[8] = (unsigned char) (MUL_2[state[8]] ^ MUL_3[state[9]] ^ state[10] ^ state[11]);
+    tmp[9] = (unsigned char) (state[8] ^ MUL_2[state[9]] ^ MUL_3[state[10]] ^ state[11]);
+    tmp[10] = (unsigned char) (state[8] ^ state[9] ^ MUL_2[state[10]] ^ MUL_3[state[11]]);
+    tmp[11] = (unsigned char) (MUL_3[state[8]] ^ state[9] ^ state[10] ^ MUL_2[state[11]]);
 
-    tmp[12] = (unsigned char)(MUL_2[state[12]] ^ MUL_3[state[13]] ^ state[14] ^ state[15]);
-    tmp[13] = (unsigned char)(state[12] ^ MUL_2[state[13]] ^ MUL_3[state[14]] ^ state[15]);
-    tmp[14] = (unsigned char)(state[12] ^ state[13] ^ MUL_2[state[14]] ^ MUL_3[state[15]]);
-    tmp[15] = (unsigned char)(MUL_3[state[12]] ^ state[13] ^ state[14] ^ MUL_2[state[15]]);
+    tmp[12] = (unsigned char) (MUL_2[state[12]] ^ MUL_3[state[13]] ^ state[14] ^ state[15]);
+    tmp[13] = (unsigned char) (state[12] ^ MUL_2[state[13]] ^ MUL_3[state[14]] ^ state[15]);
+    tmp[14] = (unsigned char) (state[12] ^ state[13] ^ MUL_2[state[14]] ^ MUL_3[state[15]]);
+    tmp[15] = (unsigned char) (MUL_3[state[12]] ^ state[13] ^ state[14] ^ MUL_2[state[15]]);
 
     for (int i = 0; i < 16; ++i) {
         state[i] = tmp[i];
@@ -135,24 +193,26 @@ void AES_Encrypt(unsigned char *message, unsigned char *key) {
         state[i] = message[i];
     }
 
-
-    int numberOfRounds = 1;
-
-    KeyExpansion();
+    int numberOfRounds = 9;
+    unsigned char expandedKey[176];
+    KeyExpansion(key, expandedKey);
     AddRoundKey(state, key);
 
     for (int i = 0; i < numberOfRounds; ++i) {
         SubBytes(state);
         ShiftRows(state);
-        MixColumns();
-        AddRoundKey(state, key);
+        MixColumns(state);
+        AddRoundKey(state, expandedKey + (16 * (i + 1)));
     }
 
     SubBytes(state);
     ShiftRows(state);
-    AddRoundKey(state, key);
-}
+    AddRoundKey(state, expandedKey + 160);
 
+    for (int i = 0; i < 16; ++i) {
+        message[i] = state[i];
+    }
+}
 
 int main() {
     unsigned char message[] = "This is a message we will encrypt with AES!";
