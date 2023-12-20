@@ -453,13 +453,20 @@ public:
                 13, 14, 15, 16
         };
 
-        size_t fileSize = calcFileSize(src);
+        int fileSize = calcFileSize(src);
         unsigned char block[BLOCK_SIZE];
 
         // Process file in blocks
-        while (fileSize >= BLOCK_SIZE) {
-            // TODO: Handle cases where the message is not evenly divisible in 16, by padding
-            src.read((char *) block, BLOCK_SIZE);
+        while (fileSize > 0) {
+            if (fileSize > BLOCK_SIZE) {
+                src.read((char *) block, BLOCK_SIZE);
+            } else {
+                src.read((char *) block, fileSize);
+                for (int i = fileSize; i < BLOCK_SIZE; ++i) {
+                    block[i] = 0;
+                }
+            }
+
             encryptBlock(block, key);
             dst.write((char *) (block), BLOCK_SIZE);
             fileSize -= BLOCK_SIZE;
