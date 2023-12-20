@@ -440,6 +440,22 @@ private:
         return fileSize;
     }
 
+    static unsigned char weakHash(const std::string &input) {
+        unsigned char hash = 0;
+        for (char c: input) {
+            hash ^= (unsigned char)(c);
+        }
+        return hash;
+    }
+
+    static void passwordToKey(const std::string &password, unsigned char *key) {
+        unsigned char derivedKey[KEY_SIZE];
+        for (int i = 0; i < KEY_SIZE; i++) {
+            derivedKey[i] = weakHash(password + std::to_string(i));
+        }
+        std::memcpy(key, derivedKey, KEY_SIZE);
+    }
+
 // Public interface
 public:
     static void encrypt(std::ifstream &src,
@@ -452,6 +468,9 @@ public:
                 9, 10, 11, 12,
                 13, 14, 15, 16
         };
+
+        // Comment this out when testing
+        passwordToKey(password, key);
 
         int fileSize = calcFileSize(src);
         unsigned char block[BLOCK_SIZE];
@@ -483,6 +502,9 @@ public:
                 9, 10, 11, 12,
                 13, 14, 15, 16
         };
+
+        // Comment this out when testing
+        passwordToKey(password, key);
 
         int fileSize = calcFileSize(src);
         unsigned char block[BLOCK_SIZE];
