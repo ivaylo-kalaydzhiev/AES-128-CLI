@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 
 unsigned char RCON[256] = {
         0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a,
@@ -223,7 +224,37 @@ int main() {
             13, 14, 15, 16
     };
 
-    AES_Encrypt(message, key);
+    // Padding
+    int originalLen = std::strlen((const char*) message);
+    int lenOfPaddedMessage = originalLen;
+    if(lenOfPaddedMessage % 16 != 0) {
+        lenOfPaddedMessage = (lenOfPaddedMessage / 16 + 1) * 16;
+    }
+
+    unsigned char* paddedMessage = new unsigned char[lenOfPaddedMessage];
+    for (int i = 0; i < lenOfPaddedMessage; ++i) {
+        if (i >= originalLen) {
+            paddedMessage[i] = 0;
+        } else {
+            paddedMessage[i] = message[i];
+        }
+    }
+
+    // Encrypt message in place
+    for (int i = 0; i < lenOfPaddedMessage; i += 16) {
+        AES_Encrypt(paddedMessage + i, key);
+    }
+
+    // Print
+    std::cout << "Encrypted message" << std::endl;
+
+    for (int i = 0; i < lenOfPaddedMessage; i++) {
+        std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(paddedMessage[i]) << " ";
+    }
+
+    std::cout << std::endl;
+
+    delete[] paddedMessage;
 
     return 0;
 }
