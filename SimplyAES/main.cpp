@@ -80,53 +80,58 @@ private:
             0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
     };
 
+    static const int ROUNDS = 9;
+    static const int KEY_SIZE = 16;
+    static const int KEY_EXPANSION_SIZE = 176;
+    static const int BLOCK_SIZE = 16;
+
 // AES Steps
 private:
-    static void keyExpansionCore(unsigned char *in, unsigned char i) {
+    static void keyExpansionCore(unsigned char *fourBytes, unsigned char i) {
         // Rotate the 4 bytes left
-        unsigned char t = in[0];
-        in[0] = in[1];
-        in[1] = in[2];
-        in[2] = in[3];
-        in[3] = t;
+        unsigned char temp = fourBytes[0];
+        fourBytes[0] = fourBytes[1];
+        fourBytes[1] = fourBytes[2];
+        fourBytes[2] = fourBytes[3];
+        fourBytes[3] = temp;
 
         // Substitution
-        in[0] = S_BOX[in[0]];
-        in[1] = S_BOX[in[1]];
-        in[2] = S_BOX[in[2]];
-        in[3] = S_BOX[in[3]];
+        fourBytes[0] = S_BOX[fourBytes[0]];
+        fourBytes[1] = S_BOX[fourBytes[1]];
+        fourBytes[2] = S_BOX[fourBytes[2]];
+        fourBytes[3] = S_BOX[fourBytes[3]];
 
         // RCon
-        in[0] ^= RCON[i];
+        fourBytes[0] ^= RCON[i];
     }
 
-    static void keyExpansion(unsigned char *inputKey, unsigned char *expandedKey) {
-        for (int i = 0; i < 16; ++i) {
-            expandedKey[i] = inputKey[i];
+    static void keyExpansion(const unsigned char *originalKey, unsigned char *expandedKey) {
+        for (int i = 0; i < KEY_SIZE; ++i) {
+            expandedKey[i] = originalKey[i];
         }
 
-        int bytesGenerated = 16;
+        int doneBytes = KEY_SIZE;
         int rconIteration = 1;
         unsigned char tmp[4];
 
-        while (bytesGenerated < 176) {
+        while (doneBytes < KEY_EXPANSION_SIZE) {
             for (int i = 0; i < 4; ++i) {
-                tmp[i] = expandedKey[i + bytesGenerated - 4];
+                tmp[i] = expandedKey[i + doneBytes - 4];
             }
 
-            if (bytesGenerated % 16 == 0) {
+            if (doneBytes % KEY_SIZE == 0) {
                 keyExpansionCore(tmp, rconIteration++);
             }
 
-            for (unsigned char a = 0; a < 4; a++) {
-                expandedKey[bytesGenerated] = expandedKey[bytesGenerated - 16] ^ tmp[a];
-                bytesGenerated++;
+            for (unsigned char a : tmp) {
+                expandedKey[doneBytes] = expandedKey[doneBytes - KEY_SIZE] ^ a;
+                doneBytes++;
             }
         }
     }
 
     static void mixColumns(unsigned char *state) {
-        unsigned char tmp[16];
+        unsigned char tmp[BLOCK_SIZE];
 
         tmp[0] = (unsigned char) (MULTIPLY_2[state[0]] ^ MULTIPLY_3[state[1]] ^ state[2] ^ state[3]);
         tmp[1] = (unsigned char) (state[0] ^ MULTIPLY_2[state[1]] ^ MULTIPLY_3[state[2]] ^ state[3]);
@@ -148,13 +153,13 @@ private:
         tmp[14] = (unsigned char) (state[12] ^ state[13] ^ MULTIPLY_2[state[14]] ^ MULTIPLY_3[state[15]]);
         tmp[15] = (unsigned char) (MULTIPLY_3[state[12]] ^ state[13] ^ state[14] ^ MULTIPLY_2[state[15]]);
 
-        for (int i = 0; i < 16; ++i) {
+        for (int i = 0; i < BLOCK_SIZE; ++i) {
             state[i] = tmp[i];
         }
     }
 
     static void shiftRows(unsigned char *state) {
-        unsigned char tmp[16];
+        unsigned char tmp[BLOCK_SIZE];
 
         tmp[0] = state[0];
         tmp[1] = state[5];
@@ -176,19 +181,19 @@ private:
         tmp[14] = state[6];
         tmp[15] = state[11];
 
-        for (int i = 0; i < 16; ++i) {
+        for (int i = 0; i < BLOCK_SIZE; ++i) {
             state[i] = tmp[i];
         }
     }
 
     static void subBytes(unsigned char *state) {
-        for (int i = 0; i < 16; ++i) {
+        for (int i = 0; i < BLOCK_SIZE; ++i) {
             state[i] = S_BOX[state[i]];
         }
     }
 
-    static void addRoundKey(unsigned char *state, unsigned char *roundKey) {
-        for (int i = 0; i < 16; ++i) {
+    static void addRoundKey(unsigned char *state, const unsigned char *roundKey) {
+        for (int i = 0; i < BLOCK_SIZE; ++i) {
             state[i] ^= roundKey[i];
         }
     }
@@ -196,28 +201,27 @@ private:
 // Public Interface
 public:
     static void encrypt(unsigned char *message, unsigned char *key) {
-        unsigned char state[16];
-        for (int i = 0; i < 16; ++i) {
+        unsigned char state[BLOCK_SIZE];
+        for (int i = 0; i < BLOCK_SIZE; ++i) {
             state[i] = message[i];
         }
 
-        int numberOfRounds = 9;
-        unsigned char expandedKey[176];
+        unsigned char expandedKey[KEY_EXPANSION_SIZE];
         keyExpansion(key, expandedKey);
         addRoundKey(state, key);
 
-        for (int i = 0; i < numberOfRounds; ++i) {
+        for (int i = 0; i < ROUNDS; ++i) {
             subBytes(state);
             shiftRows(state);
             mixColumns(state);
-            addRoundKey(state, expandedKey + (16 * (i + 1)));
+            addRoundKey(state, expandedKey + (KEY_SIZE * (i + 1)));
         }
 
         subBytes(state);
         shiftRows(state);
-        addRoundKey(state, expandedKey + 160);
+        addRoundKey(state, expandedKey + (KEY_SIZE * 10));
 
-        for (int i = 0; i < 16; ++i) {
+        for (int i = 0; i < BLOCK_SIZE; ++i) {
             message[i] = state[i];
         }
     }
@@ -270,6 +274,7 @@ int main() {
 // Questions
 // What online tool will be used to check if our encryption is right?
 // Is there some library that I must not use?
+// Am I going to have to explain how the individual steps of the AES work, including the math?
 
 // TODO: Clean this implementation
 // TODO: Implement decryption
