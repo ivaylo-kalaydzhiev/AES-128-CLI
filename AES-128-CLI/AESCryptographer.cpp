@@ -476,6 +476,31 @@ public:
     static void decrypt(std::ifstream &src,
                         std::ofstream &dst,
                         const std::string &password) {
-        std::cout << "Decrypt not implemented" << std::endl;
+        // TODO: Introduce an option to use password to generate key
+        unsigned char key[KEY_SIZE] = {
+                1, 2, 3, 4,
+                5, 6, 7, 8,
+                9, 10, 11, 12,
+                13, 14, 15, 16
+        };
+
+        int fileSize = calcFileSize(src);
+        unsigned char block[BLOCK_SIZE];
+
+        // Process file in blocks
+        while (fileSize > 0) {
+            if (fileSize > BLOCK_SIZE) {
+                src.read((char *) block, BLOCK_SIZE);
+            } else {
+                src.read((char *) block, fileSize);
+                for (int i = fileSize; i < BLOCK_SIZE; ++i) {
+                    block[i] = 0;
+                }
+            }
+
+            decryptBlock(block, key);
+            dst.write((char *) (block), BLOCK_SIZE);
+            fileSize -= BLOCK_SIZE;
+        }
     }
 };
