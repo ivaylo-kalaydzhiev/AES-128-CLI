@@ -430,7 +430,7 @@ public:
 };
 
 int main() {
-    unsigned char message[] = "This is a message we will encrypt with AES!";
+    unsigned char message[] = "What is a sword?";
     unsigned char key[16] = {
             1, 2, 3, 4,
             5, 6, 7, 8,
