@@ -10,9 +10,10 @@ private:
     static void displayMainMenu() {
         std::cout << "Chose menu option:" << std::endl
                   << "(1) Print file contents" << std::endl
-                  << "(2) Encrypt file contents" << std::endl
-                  << "(3) Decrypt file contents" << std::endl
-                  << "(4) Exit Command Line Tool" << std::endl;
+                  << "(2) Print file contents hexadecimal" << std::endl
+                  << "(3) Encrypt file contents" << std::endl
+                  << "(4) Decrypt file contents" << std::endl
+                  << "(5) Exit Command Line Tool" << std::endl;
     }
 
     static int readInt() {
@@ -26,6 +27,13 @@ private:
         std::string fileName;
         std::cin >> fileName;
         FileManager::printFileContents(fileName);
+    }
+
+    static void enterPrintFileHexadecimalFlow() {
+        std::cout << "Enter file name: ";
+        std::string fileName;
+        std::cin >> fileName;
+        FileManager::printFileContentsHex(fileName);
     }
 
     static void enterEncryptFileFlow() {
@@ -83,14 +91,18 @@ public:
                 enterMainMenuFlow();
                 break;
             case 2:
-                enterEncryptFileFlow();
+                enterPrintFileHexadecimalFlow();
                 enterMainMenuFlow();
                 break;
             case 3:
-                enterDecryptFileFlow();
+                enterEncryptFileFlow();
                 enterMainMenuFlow();
                 break;
             case 4:
+                enterDecryptFileFlow();
+                enterMainMenuFlow();
+                break;
+            case 5:
                 exitCLIFlow();
                 return;
             default:

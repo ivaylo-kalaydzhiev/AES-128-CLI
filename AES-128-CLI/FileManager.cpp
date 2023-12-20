@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "AESCryptographer.cpp"
 
 class FileManager {
@@ -21,6 +22,26 @@ public:
             std::cout << line << std::endl;
         }
 
+        file.close();
+    }
+
+    static void printFileContentsHex(const std::string &fileName) {
+        std::ifstream file(fileName, std::ios::binary);
+
+        if (!file.is_open()) {
+            std::cout << "Unable to open file: " << fileName << std::endl;
+            return;
+        }
+
+        std::ostringstream oss;
+        oss << std::hex << std::uppercase << std::setfill('0');
+
+        char c;
+        while (file.get(c)) {
+            oss << std::setw(2) << (int)(unsigned char)(c) << ' ';
+        }
+
+        std::cout << oss.str() << std::endl;
         file.close();
     }
 

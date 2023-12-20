@@ -95,14 +95,16 @@ private:
     static const int EXPANDED_KEYS_SIZE = 176;
     static const int ROUNDS = 10;
 
+    // Not even really a hash, just a util to generate a char from string
     static unsigned char weakHash(const std::string &input) {
         unsigned char hash = 0;
         for (char c: input) {
-            hash ^= (unsigned char) (c);
+            hash ^= (unsigned char)(c);
         }
         return hash;
     }
 
+    // Just a util to turn passwords to a 16 byte key
     static void passwordToKey(const std::string &password, unsigned char *key) {
         unsigned char derivedKey[KEY_SIZE];
         for (int i = 0; i < KEY_SIZE; i++) {
@@ -249,6 +251,20 @@ private:
         expandKey(key, expandedKey);
     }
 
+    // ONLY FOR TESTING
+    // Tests the CLI, using a hard coded key
+    static void produceTestingKeys(unsigned char *key, unsigned char *expandedKey) {
+        unsigned char tmp[] = {
+                0x01, 0x01, 0x01, 0x01,
+                0x01, 0x01, 0x01, 0x01,
+                0x01, 0x01, 0x01, 0x01,
+                0x01, 0x01, 0x01, 0x01
+        };
+
+        std::memcpy(key, tmp, KEY_SIZE);
+        expandKey(key, expandedKey);
+    }
+
 // Public interface
 public:
     static void encrypt(std::ifstream &src,
@@ -256,7 +272,9 @@ public:
                         const std::string &password) {
         unsigned char key[KEY_SIZE];
         unsigned char expandedKey[EXPANDED_KEYS_SIZE];
-        produceKeys(password, key, expandedKey);
+//        produceKeys(password, key, expandedKey);
+
+        produceTestingKeys(key, expandedKey);
 
         size_t fileSize = calcFileSize(src);
         unsigned char block[BLOCK_SIZE];
