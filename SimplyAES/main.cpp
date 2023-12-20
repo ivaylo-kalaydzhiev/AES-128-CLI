@@ -258,3 +258,6 @@ int main() {
 
     return 0;
 }
+// Questions
+// What online tool will be used to check if our encryption is right?
+// Is there some library that I must not use?
