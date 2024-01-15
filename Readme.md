@@ -9,8 +9,6 @@ Don't actually use this project to encrypt sensitive data. It is utterly unsafe.
 <h2>Runing the projects</h2>
 The projects were developed on an Intel Mac with CLion, therefore you could easiliy run any of them with the CLion IDE.
 
-Alternatively:
-- Clone the project
-- Exract the .cpp files
-- Run GCC to compile an exexutable
-- Run the executable
+To run the AES-128-CLI, you can also just navigate to the AES-128-CLI-Source dir from the terminal,
+compile with "g++ -std=c++11 main.cpp Program.cpp FileManager.cpp AESCryptographer.cpp -o out",
+and run ./out
