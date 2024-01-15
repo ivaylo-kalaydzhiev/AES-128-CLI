@@ -8,12 +8,30 @@
 #include "AESCryptographer.cpp"
 
 class FileManager {
+// Helpers
+private:
+    static bool fileCouldNotBeOpened(std::ifstream& file, const std::string &fileName) {
+        if (!file.is_open()) {
+            std::cout << "Unable to open file: " << fileName << std::endl;
+            return true;
+        }
+        return false;
+    }
+
+    static bool fileCouldNotBeOpened(std::ofstream& file, const std::string &fileName) {
+        if (!file.is_open()) {
+            std::cout << "Unable to open file: " << fileName << std::endl;
+            return true;
+        }
+        return false;
+    }
+
+// Interface
 public:
     static void printFileContents(const std::string &fileName) {
         std::ifstream file(fileName);
 
-        if (!file.is_open()) {
-            std::cout << "Unable to open file: " << fileName << std::endl;
+        if (fileCouldNotBeOpened(file, fileName)) {
             return;
         }
 
@@ -28,8 +46,7 @@ public:
     static void printFileContentsHex(const std::string &fileName) {
         std::ifstream file(fileName, std::ios::binary);
 
-        if (!file.is_open()) {
-            std::cout << "Unable to open file: " << fileName << std::endl;
+        if (fileCouldNotBeOpened(file, fileName)) {
             return;
         }
 
@@ -54,17 +71,12 @@ public:
         }
 
         std::ifstream srcFile(srcFileName);
-        std::ofstream dstFile(dstFileName);
-
-        // Resource leak: These openings, need to be split, beacause this way it is posible that one file is opened, the
-        // other is not, and then we return, without closing the opened file
-
-        // DRY: Checking for successfull openinigs is repeated, extract to func
-        if (!srcFile.is_open()) {
-            std::cout << "Unable to open file: " << srcFileName << std::endl;
+        if (fileCouldNotBeOpened(srcFile, srcFileName)) {
             return;
-        } else if (!dstFile.is_open()) {
-            std::cout << "Unable to open file: " << dstFileName << std::endl;
+        }
+
+        std::ofstream dstFile(dstFileName);
+        if (fileCouldNotBeOpened(dstFile, dstFileName)) {
             return;
         }
 
@@ -83,13 +95,12 @@ public:
         }
 
         std::ifstream srcFile(srcFileName);
-        std::ofstream dstFile(dstFileName);
-
-        if (!srcFile.is_open()) {
-            std::cout << "Unable to open file: " << srcFileName << std::endl;
+        if (fileCouldNotBeOpened(srcFile, srcFileName)) {
             return;
-        } else if (!dstFile.is_open()) {
-            std::cout << "Unable to open file: " << dstFileName << std::endl;
+        }
+
+        std::ofstream dstFile(dstFileName);
+        if (fileCouldNotBeOpened(dstFile, dstFileName)) {
             return;
         }
 

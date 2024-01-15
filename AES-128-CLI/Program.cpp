@@ -61,6 +61,7 @@ private:
                   << "Exiting CLI..." << std::endl;
     }
 
+// Interface
 public:
     static void enterMainMenuFlow() {
         displayMainMenu();
