@@ -336,46 +336,31 @@ private:
     }
 
     static void invMixColumns(unsigned char *state) {
+        unsigned char* s = state;
         unsigned char tmp[BLOCK_SIZE];
 
-        tmp[0] = (unsigned char) (MULTIPLY_14[state[0]] ^ MULTIPLY_11[state[1]] ^ MULTIPLY_13[state[2]] ^
-                                  MULTIPLY_9[state[3]]);
-        tmp[1] = (unsigned char) (MULTIPLY_9[state[0]] ^ MULTIPLY_14[state[1]] ^ MULTIPLY_11[state[2]] ^
-                                  MULTIPLY_13[state[3]]);
-        tmp[2] = (unsigned char) (MULTIPLY_13[state[0]] ^ MULTIPLY_9[state[1]] ^ MULTIPLY_14[state[2]] ^
-                                  MULTIPLY_11[state[3]]);
-        tmp[3] = (unsigned char) (MULTIPLY_11[state[0]] ^ MULTIPLY_13[state[1]] ^ MULTIPLY_9[state[2]] ^
-                                  MULTIPLY_14[state[3]]);
+        tmp[0] = (unsigned char) (MULTIPLY_14[s[0]] ^ MULTIPLY_11[s[1]] ^ MULTIPLY_13[s[2]] ^ MULTIPLY_9[s[3]]);
+        tmp[1] = (unsigned char) (MULTIPLY_9[s[0]] ^ MULTIPLY_14[s[1]] ^ MULTIPLY_11[s[2]] ^ MULTIPLY_13[s[3]]);
+        tmp[2] = (unsigned char) (MULTIPLY_13[s[0]] ^ MULTIPLY_9[s[1]] ^ MULTIPLY_14[s[2]] ^ MULTIPLY_11[s[3]]);
+        tmp[3] = (unsigned char) (MULTIPLY_11[s[0]] ^ MULTIPLY_13[s[1]] ^ MULTIPLY_9[s[2]] ^ MULTIPLY_14[s[3]]);
 
-        tmp[4] = (unsigned char) (MULTIPLY_14[state[4]] ^ MULTIPLY_11[state[5]] ^ MULTIPLY_13[state[6]] ^
-                                  MULTIPLY_9[state[7]]);
-        tmp[5] = (unsigned char) (MULTIPLY_9[state[4]] ^ MULTIPLY_14[state[5]] ^ MULTIPLY_11[state[6]] ^
-                                  MULTIPLY_13[state[7]]);
-        tmp[6] = (unsigned char) (MULTIPLY_13[state[4]] ^ MULTIPLY_9[state[5]] ^ MULTIPLY_14[state[6]] ^
-                                  MULTIPLY_11[state[7]]);
-        tmp[7] = (unsigned char) (MULTIPLY_11[state[4]] ^ MULTIPLY_13[state[5]] ^ MULTIPLY_9[state[6]] ^
-                                  MULTIPLY_14[state[7]]);
+        tmp[4] = (unsigned char) (MULTIPLY_14[s[4]] ^ MULTIPLY_11[s[5]] ^ MULTIPLY_13[s[6]] ^ MULTIPLY_9[s[7]]);
+        tmp[5] = (unsigned char) (MULTIPLY_9[s[4]] ^ MULTIPLY_14[s[5]] ^ MULTIPLY_11[s[6]] ^ MULTIPLY_13[s[7]]);
+        tmp[6] = (unsigned char) (MULTIPLY_13[s[4]] ^ MULTIPLY_9[s[5]] ^ MULTIPLY_14[s[6]] ^ MULTIPLY_11[s[7]]);
+        tmp[7] = (unsigned char) (MULTIPLY_11[s[4]] ^ MULTIPLY_13[s[5]] ^ MULTIPLY_9[s[6]] ^ MULTIPLY_14[s[7]]);
 
-        tmp[8] = (unsigned char) (MULTIPLY_14[state[8]] ^ MULTIPLY_11[state[9]] ^ MULTIPLY_13[state[10]] ^
-                                  MULTIPLY_9[state[11]]);
-        tmp[9] = (unsigned char) (MULTIPLY_9[state[8]] ^ MULTIPLY_14[state[9]] ^ MULTIPLY_11[state[10]] ^
-                                  MULTIPLY_13[state[11]]);
-        tmp[10] = (unsigned char) (MULTIPLY_13[state[8]] ^ MULTIPLY_9[state[9]] ^ MULTIPLY_14[state[10]] ^
-                                   MULTIPLY_11[state[11]]);
-        tmp[11] = (unsigned char) (MULTIPLY_11[state[8]] ^ MULTIPLY_13[state[9]] ^ MULTIPLY_9[state[10]] ^
-                                   MULTIPLY_14[state[11]]);
+        tmp[8] = (unsigned char) (MULTIPLY_14[s[8]] ^ MULTIPLY_11[s[9]] ^ MULTIPLY_13[s[10]] ^ MULTIPLY_9[s[11]]);
+        tmp[9] = (unsigned char) (MULTIPLY_9[s[8]] ^ MULTIPLY_14[s[9]] ^ MULTIPLY_11[s[10]] ^ MULTIPLY_13[s[11]]);
+        tmp[10] = (unsigned char) (MULTIPLY_13[s[8]] ^ MULTIPLY_9[s[9]] ^ MULTIPLY_14[s[10]] ^ MULTIPLY_11[s[11]]);
+        tmp[11] = (unsigned char) (MULTIPLY_11[s[8]] ^ MULTIPLY_13[s[9]] ^ MULTIPLY_9[s[10]] ^ MULTIPLY_14[s[11]]);
 
-        tmp[12] = (unsigned char) (MULTIPLY_14[state[12]] ^ MULTIPLY_11[state[13]] ^ MULTIPLY_13[state[14]] ^
-                                   MULTIPLY_9[state[15]]);
-        tmp[13] = (unsigned char) (MULTIPLY_9[state[12]] ^ MULTIPLY_14[state[13]] ^ MULTIPLY_11[state[14]] ^
-                                   MULTIPLY_13[state[15]]);
-        tmp[14] = (unsigned char) (MULTIPLY_13[state[12]] ^ MULTIPLY_9[state[13]] ^ MULTIPLY_14[state[14]] ^
-                                   MULTIPLY_11[state[15]]);
-        tmp[15] = (unsigned char) (MULTIPLY_11[state[12]] ^ MULTIPLY_13[state[13]] ^ MULTIPLY_9[state[14]] ^
-                                   MULTIPLY_14[state[15]]);
+        tmp[12] = (unsigned char) (MULTIPLY_14[s[12]] ^ MULTIPLY_11[s[13]] ^ MULTIPLY_13[s[14]] ^ MULTIPLY_9[s[15]]);
+        tmp[13] = (unsigned char) (MULTIPLY_9[s[12]] ^ MULTIPLY_14[s[13]] ^ MULTIPLY_11[s[14]] ^ MULTIPLY_13[s[15]]);
+        tmp[14] = (unsigned char) (MULTIPLY_13[s[12]] ^ MULTIPLY_9[s[13]] ^ MULTIPLY_14[s[14]] ^ MULTIPLY_11[s[15]]);
+        tmp[15] = (unsigned char) (MULTIPLY_11[s[12]] ^ MULTIPLY_13[s[13]] ^ MULTIPLY_9[s[14]] ^ MULTIPLY_14[s[15]]);
 
         for (int i = 0; i < BLOCK_SIZE; ++i) {
-            state[i] = tmp[i];
+            s[i] = tmp[i];
         }
     }
 
