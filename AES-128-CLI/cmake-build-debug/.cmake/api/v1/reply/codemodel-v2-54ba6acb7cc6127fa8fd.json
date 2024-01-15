@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "AES_128_CLI::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-AES_128_CLI-Debug-3c1327fdca5f5b014213.json",
+					"jsonFile" : "target-AES_128_CLI-Debug-cc2fd2dde07fb6a8efc3.json",
 					"name" : "AES_128_CLI",
 					"projectIndex" : 0
 				}
@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI/cmake-build-debug",
-		"source" : "/Users/ivaylo.kalaydzhiev/Documents/GitHub/AES-128-CLI/AES-128-CLI"
+		"build" : "/Users/ivaylokalaydzhiev/PDevelopment/AES-128-CLI/AES-128-CLI/cmake-build-debug",
+		"source" : "/Users/ivaylokalaydzhiev/PDevelopment/AES-128-CLI/AES-128-CLI"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 6
 	}
 }

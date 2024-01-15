@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 
+// Refactor: All files, but especcially this one can benefit from header files
+
 class AESCryptographer {
 // AES Constants
 private:

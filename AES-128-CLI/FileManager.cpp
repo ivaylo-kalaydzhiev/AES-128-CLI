@@ -56,6 +56,10 @@ public:
         std::ifstream srcFile(srcFileName);
         std::ofstream dstFile(dstFileName);
 
+        // Resource leak: These openings, need to be split, beacause this way it is posible that one file is opened, the
+        // other is not, and then we return, without closing the opened file
+
+        // DRY: Checking for successfull openinigs is repeated, extract to func
         if (!srcFile.is_open()) {
             std::cout << "Unable to open file: " << srcFileName << std::endl;
             return;

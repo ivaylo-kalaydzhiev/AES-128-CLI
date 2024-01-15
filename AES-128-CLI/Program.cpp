@@ -6,6 +6,22 @@
 #include "FileManager.cpp"
 
 class Program {
+// Helpers
+private:
+    static std::string promptStringInputWithMessage(const char* message) {
+        std::cout << message;
+        std::string input;
+        std::cin >> input;
+        return input;
+    }
+
+    static int readInt() {
+        int n;
+        std::cin >> n;
+        return n;
+    }
+
+// Flows
 private:
     static void displayMainMenu() {
         std::cout << "Chose menu option:" << std::endl
@@ -16,63 +32,29 @@ private:
                   << "(5) Exit Command Line Tool" << std::endl;
     }
 
-    static int readInt() {
-        int n;
-        std::cin >> n;
-        return n;
-    }
-
     static void enterPrintFileFlow() {
-        std::cout << "Enter file name: ";
-        std::string fileName;
-        std::cin >> fileName;
+        std::string fileName = promptStringInputWithMessage("Enter file name: ");
         FileManager::printFileContents(fileName);
     }
 
     static void enterPrintFileHexadecimalFlow() {
-        std::cout << "Enter file name: ";
-        std::string fileName;
-        std::cin >> fileName;
+        std::string fileName = promptStringInputWithMessage("Enter file name: ");
         FileManager::printFileContentsHex(fileName);
     }
 
     static void enterEncryptFileFlow() {
-        // Ask for file name
-        std::cout << "Enter file name: ";
-        std::string srcFileName;
-        std::cin >> srcFileName;
+        std::string srcFileName = promptStringInputWithMessage("Enter source file name: ");
+        std::string password = promptStringInputWithMessage("Enter password: ");
+        std::string dstFileName = promptStringInputWithMessage("Enter destination file name: ");
 
-        // Ask for password
-        std::cout << "Enter encryption password: ";
-        std::string password;
-        std::cin >> password;
-
-        // Ask for destination file name
-        std::cout << "Enter destination file name: ";
-        std::string dstFileName;
-        std::cin >> dstFileName;
-
-        // Make the FileManger encrypt it
         FileManager::encryptFile(srcFileName, dstFileName, password);
     }
 
     static void enterDecryptFileFlow() {
-        // Ask for file name
-        std::cout << "Enter file name: ";
-        std::string srcFileName;
-        std::cin >> srcFileName;
+        std::string srcFileName = promptStringInputWithMessage("Enter source file name: ");
+        std::string password = promptStringInputWithMessage("Enter password: ");
+        std::string dstFileName = promptStringInputWithMessage("Enter destination file name: ");
 
-        // Ask for password
-        std::cout << "Enter encryption password: ";
-        std::string password;
-        std::cin >> password;
-
-        // Ask for destination file name
-        std::cout << "Enter destination file name: ";
-        std::string dstFileName;
-        std::cin >> dstFileName;
-
-        // Make the FileManger encrypt it
         FileManager::decryptFile(srcFileName, dstFileName, password);
     }
 
@@ -107,6 +89,7 @@ public:
                 return;
             default:
                 enterMainMenuFlow();
+                // Defensive programming: Does this work against any sort of input?
         }
     }
 };
