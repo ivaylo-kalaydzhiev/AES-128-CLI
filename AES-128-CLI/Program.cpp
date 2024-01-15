@@ -15,12 +15,6 @@ private:
         return input;
     }
 
-    static int readInt() {
-        int n;
-        std::cin >> n;
-        return n;
-    }
-
 // Flows
 private:
     static void displayMainMenu() {
@@ -62,11 +56,17 @@ private:
         std::cout << "You chose to leave... sad!" << std::endl;
     }
 
+    static void invalidInputFlow() {
+        std::cout << "ERROR: Only values 1 to 5 are allowed!" << std::endl
+                  << "Exiting CLI..." << std::endl;
+    }
+
 public:
     static void enterMainMenuFlow() {
         displayMainMenu();
 
-        int choice = readInt();
+        int choice;
+        std::cin >> choice;
         switch (choice) {
             case 1:
                 enterPrintFileFlow();
@@ -86,10 +86,9 @@ public:
                 break;
             case 5:
                 exitCLIFlow();
-                return;
+                break;
             default:
-                enterMainMenuFlow();
-                // Defensive programming: Does this work against any sort of input?
+                invalidInputFlow();
         }
     }
 };
